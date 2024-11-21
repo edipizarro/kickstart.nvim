@@ -971,3 +971,10 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+--- Custom key bindings
+
+--- Copy path to clipboard
+vim.keymap.set('n', '<leader>pc', function()
+  vim.fn.setreg('+', vim.fn.expand '%:p')
+end, { desc = 'Copy current file path to clipboard' })
