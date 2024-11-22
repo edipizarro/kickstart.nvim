@@ -975,6 +975,8 @@ require('lazy').setup({
 --- Custom key bindings
 
 --- Copy path to clipboard
-vim.keymap.set('n', '<leader>pc', function()
-  vim.fn.setreg('+', vim.fn.expand '%:p')
+vim.keymap.set('n', '<leader>cp', function()
+  local path = vim.fn.expand '%:p'
+  vim.fn.setreg('+', path)
+  print('Copied path of current file to clipboard: ' .. path)
 end, { desc = 'Copy current file path to clipboard' })
