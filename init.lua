@@ -980,3 +980,36 @@ vim.keymap.set('n', '<leader>cp', function()
   vim.fn.setreg('+', path)
   print('Copied path of current file to clipboard: ' .. path)
 end, { desc = 'Copy current file path to clipboard' })
+
+--- Toggle CopilotChat
+vim.keymap.set('n', '<leader>cc', function()
+  vim.cmd 'CopilotChatToggle'
+end, { desc = 'Toggle CopilotChat' })
+
+--- Reset CopilotChat
+vim.keymap.set('n', '<leader>cr', function()
+  vim.cmd 'CopilotChatReset'
+end, { desc = 'Reset CopilotChat' })
+
+--- Stop CopilotChat Output
+vim.keymap.set('n', '<leader>cS', function()
+  vim.cmd 'CopilotChatStop'
+end, { desc = 'Stop CopilotChat Output' })
+
+--- CopilotChat Models
+vim.keymap.set('n', '<leader>cM', function()
+  vim.cmd 'CopilotChatModels'
+end, { desc = 'Select copilot model' })
+
+--- Toggle Copilot auto suggestions
+vim.keymap.set('n', '<leader>cs', function()
+  local copilot_enabled = vim.g.copilot_enabled
+  if copilot_enabled then
+    vim.cmd 'Copilot disable'
+    print 'Copilot Disabled'
+  else
+    vim.cmd 'Copilot enable'
+    print 'Copilot Enabled'
+  end
+  vim.g.copilot_enabled = not copilot_enabled
+end, { noremap = true, silent = true, desc = 'Toggle copilot suggestions' })
