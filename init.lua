@@ -255,6 +255,10 @@ require('lazy').setup({
     },
     -- See Commands section for default commands if you want to lazy load on them
   },
+
+  -- NOTE: WakaTime is a plugin that tracks your time spent in Neovim
+  { 'wakatime/vim-wakatime', lazy = false },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
