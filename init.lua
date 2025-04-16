@@ -239,13 +239,18 @@ require('lazy').setup({
   --
   {
     'CopilotC-Nvim/CopilotChat.nvim',
-    branch = 'canary',
+    branch = 'main',
     dependencies = {
       { 'github/copilot.vim' }, -- or zbirenbaum/copilot.lua
       { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
     },
     build = 'make tiktoken', -- Only on MacOS or Linux
     opts = {
+      mappings = {
+        complete = {
+          insert = '<A-Tab>', -- use Control+Tab to trigger/accept completion
+        },
+      },
       -- See Configuration section for options
     },
     -- See Commands section for default commands if you want to lazy load on them
