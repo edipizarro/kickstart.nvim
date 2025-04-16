@@ -281,6 +281,24 @@ require('lazy').setup({
   -- NOTE: Debugger
   { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
 
+  -- NOTE: Neotree file explorer
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+      'MunifTanjim/nui.nvim',
+      -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+    lazy = false, -- neo-tree will lazily load itself
+    ---@module "neo-tree"
+    ---@type neotree.Config?
+    opts = {
+      -- fill any relevant options here
+    },
+  },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -1044,3 +1062,8 @@ vim.keymap.set('n', '<leader>cs', function()
   end
   vim.g.copilot_enabled = not copilot_enabled
 end, { noremap = true, silent = true, desc = 'Toggle copilot suggestions' })
+
+-- Toggle file explorer Neotree
+vim.keymap.set('n', '<leader>cn', function()
+  vim.cmd 'Neotree toggle'
+end, { desc = 'Toggle Neotree' })
