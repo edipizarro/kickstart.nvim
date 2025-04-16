@@ -1063,6 +1063,11 @@ vim.keymap.set('n', '<leader>cs', function()
   vim.g.copilot_enabled = not copilot_enabled
 end, { noremap = true, silent = true, desc = 'Toggle copilot suggestions' })
 
+--- Git blame current file
+vim.keymap.set('n', '<leader>gb', function()
+  vim.cmd('vsplit | terminal git blame ' .. vim.fn.expand '%')
+end, { desc = 'Git blame full file' })
+
 -- Toggle file explorer Neotree
 vim.keymap.set('n', '<leader>cn', function()
   vim.cmd 'Neotree toggle'
