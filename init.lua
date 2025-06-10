@@ -1113,3 +1113,8 @@ end, { desc = 'Git blame full file' })
 vim.keymap.set('n', '<leader>cn', function()
   vim.cmd 'Neotree toggle'
 end, { desc = 'Toggle Neotree' })
+
+-- Configure folding with Treesitter
+vim.opt.foldmethod = 'expr'
+vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldlevel = 99 -- Open up to 99 folds by default (All folds should open)
