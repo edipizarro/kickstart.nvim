@@ -237,24 +237,6 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
-  {
-    'CopilotC-Nvim/CopilotChat.nvim',
-    branch = 'main',
-    dependencies = {
-      { 'github/copilot.vim' }, -- or zbirenbaum/copilot.lua
-      { 'nvim-lua/plenary.nvim' }, -- for curl, log wrapper
-    },
-    build = 'make tiktoken', -- Only on MacOS or Linux
-    opts = {
-      mappings = {
-        complete = {
-          insert = '<A-Tab>', -- use Control+Tab to trigger/accept completion
-        },
-      },
-      -- See Configuration section for options
-    },
-    -- See Commands section for default commands if you want to lazy load on them
-  },
 
   -- NOTE: WakaTime is a plugin that tracks your time spent in Neovim
   { 'wakatime/vim-wakatime', lazy = false },
@@ -1070,39 +1052,6 @@ vim.keymap.set('n', '<leader>cp', function()
   vim.fn.setreg('+', path)
   print('Copied path of current file to clipboard: ' .. path)
 end, { desc = 'Copy current file path to clipboard' })
-
---- Toggle CopilotChat
-vim.keymap.set('n', '<leader>cc', function()
-  vim.cmd 'CopilotChatToggle'
-end, { desc = 'Toggle CopilotChat' })
-
---- Reset CopilotChat
-vim.keymap.set('n', '<leader>cr', function()
-  vim.cmd 'CopilotChatReset'
-end, { desc = 'Reset CopilotChat' })
-
---- Stop CopilotChat Output
-vim.keymap.set('n', '<leader>cS', function()
-  vim.cmd 'CopilotChatStop'
-end, { desc = 'Stop CopilotChat Output' })
-
---- CopilotChat Models
-vim.keymap.set('n', '<leader>cM', function()
-  vim.cmd 'CopilotChatModels'
-end, { desc = 'Select copilot model' })
-
---- Toggle Copilot auto suggestions
-vim.keymap.set('n', '<leader>cs', function()
-  local copilot_enabled = vim.g.copilot_enabled
-  if copilot_enabled then
-    vim.cmd 'Copilot disable'
-    print 'Copilot Disabled'
-  else
-    vim.cmd 'Copilot enable'
-    print 'Copilot Enabled'
-  end
-  vim.g.copilot_enabled = not copilot_enabled
-end, { noremap = true, silent = true, desc = 'Toggle copilot suggestions' })
 
 --- Git blame current file
 vim.keymap.set('n', '<leader>gb', function()
