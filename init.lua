@@ -238,9 +238,6 @@ require('lazy').setup({
   -- Use `opts = {}` to force a plugin to be loaded.
   --
 
-  -- NOTE: WakaTime is a plugin that tracks your time spent in Neovim
-  { 'wakatime/vim-wakatime', lazy = false },
-
   -- NOTE: git blame
   {
     'f-person/git-blame.nvim',
