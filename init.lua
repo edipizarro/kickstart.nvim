@@ -693,7 +693,12 @@ require('lazy').setup({
         pyright = {},
         ruff = {},
         ts_ls = {},
-        eslint = {},
+        eslint = {
+          cmd = { 'vscode-eslint-language-server', '--stdio' },
+          on_new_config = function(config)
+            config.cmd = vim.list_extend({ 'node', '--max-old-space-size=12288' }, config.cmd)
+          end,
+        },
         terraformls = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
