@@ -167,6 +167,15 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Diagnostic/Lint keymaps under <leader>l
+vim.keymap.set('n', '<leader>le', vim.diagnostic.open_float, { desc = '[L]int [E]rror (show diagnostic)' })
+vim.keymap.set('n', '<leader>lq', vim.diagnostic.setloclist, { desc = '[L]int [Q]uickfix list' })
+vim.keymap.set('n', '<leader>ll', function()
+  require('lint').try_lint()
+end, { desc = '[L]int [L]int now' })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Previous [D]iagnostic' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Next [D]iagnostic' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -237,6 +246,17 @@ require('lazy').setup({
   --
   -- Use `opts = {}` to force a plugin to be loaded.
   --
+
+  -- NOTE: TypeScript tools (more memory efficient than ts_ls)
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {
+      settings = {
+        tsserver_max_memory = 16384,
+      },
+    },
+  },
 
   -- NOTE: git blame
   {
@@ -630,6 +650,18 @@ require('lazy').setup({
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
+          -- Various LSP links
+          map('<leader>ld', require('telescope.builtin').lsp_definitions, '[L]SP [D]efinition')
+          map('<leader>lr', require('telescope.builtin').lsp_references, '[L]SP [R]eferences')
+          map('<leader>li', require('telescope.builtin').lsp_implementations, '[L]SP [I]mplementation')
+          map('<leader>lt', require('telescope.builtin').lsp_type_definitions, '[L]SP [T]ype Definition')
+          map('<leader>ls', require('telescope.builtin').lsp_document_symbols, '[L]SP [S]ymbols (Document)')
+          map('<leader>lS', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[L]SP [S]ymbols (Workspace)')
+          map('<leader>ln', vim.lsp.buf.rename, '[L]SP Re[n]ame')
+          map('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction', { 'n', 'x' })
+          map('<leader>lD', vim.lsp.buf.declaration, '[L]SP [D]eclaration')
+          map('<leader>lh', vim.lsp.buf.hover, '[L]SP [H]over Documentation')
+
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
           --    See `:help CursorHold` for information about when this is executed
@@ -692,13 +724,6 @@ require('lazy').setup({
         gopls = {},
         pyright = {},
         ruff = {},
-        ts_ls = {},
-        eslint = {
-          cmd = { 'vscode-eslint-language-server', '--stdio' },
-          on_new_config = function(config)
-            config.cmd = vim.list_extend({ 'node', '--max-old-space-size=12288' }, config.cmd)
-          end,
-        },
         terraformls = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -739,6 +764,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'eslint_d',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -765,14 +791,14 @@ require('lazy').setup({
       {
         '<leader>f',
         function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
+          require('conform').format { async = true, lsp_format = 'fallback', timeout_ms = 120000 }
         end,
         mode = '',
         desc = '[F]ormat buffer',
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -785,7 +811,7 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 120000,
           lsp_format = lsp_format_opt,
         }
       end,
@@ -797,6 +823,10 @@ require('lazy').setup({
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'eslint_d' }, -- prettier first, then eslint fixes
+        typescript = { 'prettierd', 'eslint_d' },
+        javascriptreact = { 'prettierd', 'eslint_d' },
+        typescriptreact = { 'prettierd', 'eslint_d' },
       },
     },
   },
